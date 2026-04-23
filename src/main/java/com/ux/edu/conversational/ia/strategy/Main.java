@@ -1,5 +1,7 @@
 package com.ux.edu.conversational.ia.strategy;
 
+import com.ux.edu.conversational.ia.phi3strategy.Phi3Strategy;
+
 public class Main {
 
     public static void main(String[] args) {
@@ -19,6 +21,12 @@ public class Main {
         miAgente.setModelo(new MistralStrategy());
 
         miAgente.interactuar("Dime un chiste corto.");
+
+        // 3. Implementamos Phi3Strategy
+
+        miAgente.setModelo(new Phi3Strategy());
+
+        miAgente.interactuar("Explícale la computación cuántica a un niño de 8 años.");
 
     }
 
