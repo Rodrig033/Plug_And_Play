@@ -18,7 +18,7 @@ public class Llama3Strategy implements InteligenciaArtificialStrategy {
                         Usuario: ¿Qué es un bucle?
                         IA: Un bucle es una estructura que repite instrucciones.
                         """)
-                // Input del usuerio
+                // Input del usuario
                 .setUserPrompt(prompt);
         String promptFinal = builder.build();
 
