@@ -4,45 +4,105 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ux.edu.conversational.ia.prompt.PromptBuilder;
 
 public class OllamaCliente {
     private static final String URL = "http://localhost:11434/api/generate";
+    private static String generarRespuesta(
 
-    private static String generarRespuesta(String prompt){
+            String modelo,
+            String prompt
+
+    ) {
+
         try {
-            HttpClient client = HttpClient.newHttpClient();
+
+            HttpClient client =
+                    HttpClient.newHttpClient();
+
+            String promptSeguro = prompt
+                    .replace("\n", "\\n")
+                    .replace("\"", "\\\"");
+
             String json = """
-                {
-                  "model": "llama3.2:3b",
-                  "prompt": "%s",
-                  "stream": false
-                }
-                """.formatted(prompt);
 
-            HttpRequest request = HttpRequest.newBuilder().uri(URI.create(URL))
-                    .header("Content-Type", "application/json")
-                    .POST(HttpRequest.BodyPublishers.ofString(json)).build();
+            {
+            
+              "model": "%s",
+              "prompt": "%s",
+              "stream": false
 
-            HttpResponse <String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            }
+
+            """.formatted(modelo, promptSeguro);
+            System.out.println(json);
+
+            HttpRequest request =
+                    HttpRequest.newBuilder()
+                            .uri(URI.create(URL))
+                            .header(
+                                    "Content-Type",
+                                    "application/json"
+                            )
+
+                            .POST(
+                                    HttpRequest.BodyPublishers
+                                            .ofString(json)
+
+                            )
+                            .build();
+
+            HttpResponse<String> response =
+                    client.send(
+                            request,
+                            HttpResponse.BodyHandlers
+                                    .ofString()
+
+                    );
+
+            System.out.println("BODY:");
+            System.out.println(response.body());
 
             return response.body();
 
-        } catch (Exception e){
+        } catch (Exception e) {
+
             e.printStackTrace();
+
             return null;
+
         }
     }
 
-    public static OllamaRespuesta generar(String prompt){
+    public static OllamaRespuesta generar(
+            String modelo,
+            String prompt
+    ) {
+
         try {
-            String json = generarRespuesta(prompt);
-            ObjectMapper mapper = new ObjectMapper();
-            return mapper.readValue(json, OllamaRespuesta.class);
+            String json =
+                    generarRespuesta(
+                            modelo,
+                            prompt
+                    );
 
-        }catch (Exception e){
+            if (json == null) {
+                return null;
+            }
+
+            ObjectMapper mapper =
+                    new ObjectMapper();
+            return mapper.readValue(
+                    json,
+                    OllamaRespuesta.class
+
+            );
+
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
     }
+
 
 }

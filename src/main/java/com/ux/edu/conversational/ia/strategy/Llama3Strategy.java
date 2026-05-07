@@ -1,6 +1,8 @@
 package com.ux.edu.conversational.ia.strategy;
 
 import com.ux.edu.conversational.ia.prompt.PromptBuilder;
+import com.ux.edu.conversational.ia.strategy.ollama.OllamaCliente;
+import com.ux.edu.conversational.ia.strategy.ollama.OllamaRespuesta;
 
 public class Llama3Strategy implements InteligenciaArtificialStrategy {
 
@@ -8,31 +10,30 @@ public class Llama3Strategy implements InteligenciaArtificialStrategy {
 
     public String generarRespuesta(String prompt) {
 
-        PromptBuilder builder = new PromptBuilder()
-                // Sistema
-                .setSystemPrompt("Eres un experto en programación. Responde de forma clara y técnica.")
-                // Ejemplos
-                .setExamples("""
-                        Usuario: ¿Qué es una variable?
-                        IA: Una variable es un espacio en memoria que almacena un valor.
-                        Usuario: ¿Qué es un bucle?
-                        IA: Un bucle es una estructura que repite instrucciones.
-                        """)
-                // Input del usuario
-                .setUserPrompt(prompt);
-        String promptFinal = builder.build();
+        OllamaRespuesta respuesta =
 
-        // Simulación del modelo
-        return "[Llama3-Ollama]: Procesando...\n" + promptFinal;
+                OllamaCliente.generar(
+                        "llama3.2:3b",
+                        prompt
+                );
+
+        if (respuesta == null) {
+
+            return "Error al obtener respuesta.";
+
+        }
+
+        return respuesta.getResponse();
 
     }
 
     @Override
 
     public String getNombreModelo() {
-        return "Llama3";
-    }
 
+        return "Llama3";
+
+    }
 }
 
 
