@@ -26,16 +26,15 @@ public class PromptBuilder {
     // Construcción con delimitadores
     public String build(){
         return """
-                <system>
-                %s
-                </system>
-                <examples>
-                %s
-                </examples>
-                <user>
-                %s
-                </user>
-                """.formatted(systemPrompt, examples, userPrompt);
+            System:
+            %s
+
+            User:
+            %s
+            """.formatted(
+                systemPrompt != null ? systemPrompt : "",
+                userPrompt != null ? userPrompt : ""
+        );
     }
 
 }
